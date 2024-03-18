@@ -1,0 +1,1 @@
+SELECT * from CUSTOMERS where S_Num=1001;

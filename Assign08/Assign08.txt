@@ -1,0 +1,91 @@
+CREATE TABLE Library (
+    Section VARCHAR(50),
+    BookID INT,
+    Authors VARCHAR(100),
+    borrower_name VARCHAR(100),
+    Issue_Date DATE,
+    Return_Date DATE
+);
+
+
+SHOW TABLES;
+
+INSERT INTO Library (Section, BookID, Authors, borrower_name, Issue_Date, Return_Date) 
+VALUES
+('Algorithm', 7, 'Corman', 'Manish', '2023-07-20', '2023-07-25'),
+('Physics', 1, 'Feynman', 'Alice', '2023-01-01', '2023-01-15'),
+('Physics', 2, 'Hawking', 'Bob', '2023-02-01', '2023-02-15'),
+('Chemistry', 3, 'Brown', 'Alice', '2023-03-01', '2023-03-15'),
+('Chemistry', 4, 'Smith', 'Charlie', '2023-04-01', '2023-04-15'),
+('Maths', 5, 'Einstein', 'Bob', '2023-05-01', '2023-05-15'),
+('Maths', 6, 'Newton', 'Alice', '2023-06-01', '2023-06-15'),
+('Algorithm', 7, 'Corman', 'Alice', '2023-07-01', '2023-07-15'),
+('Algorithm', 8, 'Corman', 'Bob', '2023-08-01', '2023-08-15'),
+('Graphics', 9, 'Foley', 'Charlie', '2023-09-01', '2023-09-15'),
+('Graphics', 10, 'van Dam', 'Alice', '2023-10-01', '2023-10-15'),
+('Networking', 11, 'Kurose', 'Alice', '2023-11-01', '2023-11-15'),
+('Networking', 12, 'Ross', 'Bob', '2023-12-01', '2023-12-15'),
+('Networking', 12, 'Ross', 'Bob', '2023-12-20', '2023-12-25'),
+('Networking', 13, 'Ross', 'Bob', '2023-12-01', '2023-12-15'),
+('Networking', 13, 'Ross', 'Bob', '2023-12-020', '2023-12-25'),
+('Compiler', 13, 'Aho', 'Charlie', '2024-01-01', '2024-01-15'),
+('Compiler', 14, 'Ullman', 'Alice', '2024-02-01', '2024-02-15'),
+('Systems', 15, 'Tanenbaum', 'Bob', '2024-03-01', '2024-03-15'),
+('Systems', 16, 'Stallings', 'Charlie', '2024-04-01', '2024-04-15'),
+('English', 17, 'Shakespeare', 'Alice', '2024-05-01', '2024-05-15'),
+('English', 18, 'Dickens', 'Bob', '2024-06-01', '2024-06-15');
+
+SELECT * FROM LIBRARY;
+
+-- D]
+SELECT * FROM LIBRARY WHERE SECTION = 'Networking' AND borrower_name="Bob" AND (SELECT COUNT(*) FROM Library WHERE SECTION = 'Networking' AND borrower_name="Bob")>=3;
+
+DELIMITER //
+
+CREATE PROCEDURE List_Algorithm_Books_By_Author_More_Than_2_Times()
+BEGIN
+    SELECT BOOKID,SECTION,AUTHORS FROM LIBRARY WHERE SECTION = 'Algorithm' AND Authors = 'Corman' AND (SELECT COUNT(*) FROM Library WHERE SECTION = 'Algorithm' AND Authors = 'Corman')>2;
+END//
+
+DELIMITER ;
+
+CALL List_Algorithm_Books_By_Author_More_Than_2_Times();
+
+-- E]
+
+DELIMITER //
+
+CREATE PROCEDURE Average_Book_Usage_Days()
+BEGIN
+    SELECT AVG(DATEDIFF(Return_Date, Issue_Date)) AS avg_usage_days FROM Library;
+END//
+
+DELIMITER ;
+
+CALL Average_Book_Usage_Days();
+
+-- B]
+
+DELIMITER //
+
+CREATE PROCEDURE List_Physics_Books_For_Borrowe(IN borrowername VARCHAR(100))
+BEGIN
+    SELECT * FROM Library WHERE Section = 'Physics' AND borrower_name = borrowername;
+END//
+
+DELIMITER ;
+
+CALL List_Physics_Books_For_Borrowe("Bob");
+
+-- c]
+
+DELIMITER //
+
+CREATE PROCEDURE List_Networking_Books_More_Than(IN borrowername VARCHAR(100))
+BEGIN
+    SELECT * FROM LIBRARY WHERE SECTION = 'Networking' AND borrower_name=borrowername AND (SELECT COUNT(*) FROM Library WHERE SECTION = 'Networking' AND borrower_name=borrowername)>3;
+END//
+
+DELIMITER ;
+
+call List_Networking_Books_More_Than("Bob");

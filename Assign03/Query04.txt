@@ -1,0 +1,1 @@
+SELECT S_Name,City from Sales_People where City="London" and Comm>0.10;

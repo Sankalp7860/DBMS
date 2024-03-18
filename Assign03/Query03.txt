@@ -1,0 +1,1 @@
+SELECT * from ORDERS where AMT>1000;

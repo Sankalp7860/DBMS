@@ -1,0 +1,1 @@
+SELECT * from CUSTOMERS where Rating>100 OR City="Rome";
